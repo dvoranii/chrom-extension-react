@@ -1,8 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import "./popup.css";
 
-const test = <img src="icon.png" />;
+const test = <p>Options!</p>;
 
 const root = document.createElement("div");
 document.body.appendChild(root);
