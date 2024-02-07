@@ -5,20 +5,22 @@ const saveToLocalStorage = (
   chrome.storage.local.set(data, callback);
 };
 
+const createContextMenu = () => {
+  chrome.contextMenus.onClicked.addListener((info, tab) => {
+    if (info.menuItemId === "1") {
+      saveToLocalStorage({ selectedText: info.selectionText }, () => {
+        console.log("Selected text saved to local storage");
+      });
+    }
+  });
+};
+
 chrome.runtime.onInstalled.addListener((details) => {
   chrome.contextMenus.create({
     title: "Select text",
     id: "1",
     contexts: ["page", "selection"],
   });
-});
-
-chrome.contextMenus.onClicked.addListener((info, tab) => {
-  if (info.menuItemId === "1") {
-    saveToLocalStorage({ selectedText: info.selectionText }, () => {
-      console.log("Selected text saved to local storage");
-    });
-  }
 });
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
@@ -35,6 +37,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
           saveToLocalStorage({ apiKey: apiKey }, () => {
             sendResponse({ status: "API Key saved", apiKey: apiKey });
           });
+          createContextMenu();
         } else {
           sendResponse({ status: "Invalid API Key" });
         }
@@ -42,12 +45,6 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
       .catch((error) => {
         sendResponse({ status: "Validation Failed", error: error.toString() });
       });
-    return true;
-  }
-  if (message.type === "setApiKey") {
-    saveToLocalStorage({ apiKey: message.apiKey }, () => {
-      sendResponse({ status: "API Key saved", apiKey: message.apiKey });
-    });
     return true;
   }
 
