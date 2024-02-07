@@ -9,12 +9,13 @@ const StyledButton = styled.button`
   transition: all 150ms ease;
   text-transform: uppercase;
   font-family: Impact, "Arial Narrow Bold", sans-serif;
+  transition: all 150ms ease;
 
   &:hover {
     background-color: lightblue;
     color: black;
     cursor: pointer;
-    transform: translateY(-10px) scale() (1.1);
+    transform: translateY(-4px) scale(1.02);
   }
 `;
 
